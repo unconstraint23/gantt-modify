@@ -25,6 +25,8 @@ export function createSVG(
 export interface TaskDetail {
   startDate: Date;
   endDate: Date;
+  postponeStartDate?: Date
+  postponeEndDate?: Date
   detail: any;
   color: string | undefined;
   id: string;
@@ -42,11 +44,15 @@ export const getTasks = (tasks: any[] = []): TaskDetail[] => {
   const fn = (list: any[]) => {
     list
       .filter(item => item.isExpand === undefined || item.isExpand)
-      .forEach(({startDate, endDate, children = [], type, id, ...rest}) => {
+      .forEach(({startDate, endDate, children = [], type, id,postponeStartDate,postponeEndDate, ...rest}) => {
         const newStartDate = startDate && moment(startDate);
         const newEndDate = endDate && moment(endDate);
+        const newpostponeStartDate = postponeStartDate && moment(postponeStartDate);
+        const newpostponeEndDate = postponeEndDate && moment(postponeEndDate);
         const isInValidDate =
           startDate && endDate && moment(newStartDate).isAfter(newEndDate);
+          const isInValidDatePostpone =
+          newpostponeStartDate && newpostponeEndDate && moment(newpostponeEndDate).isAfter(newpostponeEndDate);
         const typeId = type.id;
         const target = {
           startDate:
@@ -57,6 +63,14 @@ export const getTasks = (tasks: any[] = []): TaskDetail[] => {
           endDate:
             endDate &&
             moment(!isInValidDate ? endDate : startDate)
+              .endOf('D')
+              .toDate(),
+            postponeStartDate:  postponeStartDate &&
+            moment(isInValidDatePostpone ? postponeEndDate : postponeStartDate)
+              .startOf('D')
+              .toDate(),
+            postponeEndDate: postponeEndDate &&
+            moment(!isInValidDatePostpone ? postponeEndDate : postponeStartDate)
               .endOf('D')
               .toDate(),
           detail: rest,

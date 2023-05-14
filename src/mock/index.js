@@ -13,6 +13,8 @@ export const mockData = [
     summary: ' task 1 ',
     startDate: '2021-10-28',
     endDate: '2021-11-01',
+    postponeStartDate: '2021-11-10',
+    postponeEndDate: '2021-11-19',
     storyPoint: null,
     status: {
       name: 'Waiting',
@@ -343,6 +345,7 @@ export const mockData = [
     summary: ' task 1 ',
     startDate: '2021-10-25',
     endDate: '2021-10-29',
+    
     storyPoint: null,
     status: {
       self: 'https://baidu.com/rest/api/2/status/10002',
